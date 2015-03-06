@@ -10,6 +10,16 @@ import SpriteKit
 
 class GameScene: SKScene {
     override func didMoveToView(view: SKView) {
+
+        backgroundColor = SKColor.whiteColor()
+
+        var circle : CGRect = CGRectMake(100.0, 100.0, 80.0, 80.0) //set your dimension
+        var shapeNode : SKShapeNode = SKShapeNode()
+        shapeNode.path = UIBezierPath(ovalInRect: circle).CGPath
+        shapeNode.fillColor = SKColor.redColor()
+        shapeNode.lineWidth = 1 //set your border
+        self.addChild(shapeNode)
+
         /* Setup your scene here */
         let myLabel = SKLabelNode(fontNamed:"Chalkduster")
         myLabel.text = "Hello, World!";
