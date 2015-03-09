@@ -15,6 +15,8 @@
 		64BB37941AA9E0DD00DF749F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 64BB37931AA9E0DD00DF749F /* Images.xcassets */; };
 		64BB37971AA9E0DD00DF749F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64BB37951AA9E0DD00DF749F /* LaunchScreen.xib */; };
 		64BB37A31AA9E0DD00DF749F /* JumpPrototypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BB37A21AA9E0DD00DF749F /* JumpPrototypeTests.swift */; };
+		64BB37AD1AA9F36200DF749F /* Scrolling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BB37AC1AA9F36200DF749F /* Scrolling.swift */; };
+		64BB37AF1AA9F5EF00DF749F /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 64BB37AE1AA9F5EF00DF749F /* background.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +42,8 @@
 		64BB379C1AA9E0DD00DF749F /* JumpPrototypeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JumpPrototypeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		64BB37A11AA9E0DD00DF749F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		64BB37A21AA9E0DD00DF749F /* JumpPrototypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpPrototypeTests.swift; sourceTree = "<group>"; };
+		64BB37AC1AA9F36200DF749F /* Scrolling.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scrolling.swift; sourceTree = "<group>"; };
+		64BB37AE1AA9F5EF00DF749F /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,11 +88,13 @@
 				64BB37881AA9E0DD00DF749F /* AppDelegate.swift */,
 				64BB378A1AA9E0DD00DF749F /* GameScene.sks */,
 				64BB378C1AA9E0DD00DF749F /* GameScene.swift */,
+				64BB37AE1AA9F5EF00DF749F /* background.png */,
 				64BB378E1AA9E0DD00DF749F /* GameViewController.swift */,
 				64BB37901AA9E0DD00DF749F /* Main.storyboard */,
 				64BB37931AA9E0DD00DF749F /* Images.xcassets */,
 				64BB37951AA9E0DD00DF749F /* LaunchScreen.xib */,
 				64BB37861AA9E0DD00DF749F /* Supporting Files */,
+				64BB37AC1AA9F36200DF749F /* Scrolling.swift */,
 			);
 			path = JumpPrototype;
 			sourceTree = "<group>";
@@ -199,6 +205,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				64BB37971AA9E0DD00DF749F /* LaunchScreen.xib in Resources */,
+				64BB37AF1AA9F5EF00DF749F /* background.png in Resources */,
 				64BB37941AA9E0DD00DF749F /* Images.xcassets in Resources */,
 				64BB378B1AA9E0DD00DF749F /* GameScene.sks in Resources */,
 				64BB37921AA9E0DD00DF749F /* Main.storyboard in Resources */,
@@ -222,6 +229,7 @@
 				64BB378D1AA9E0DD00DF749F /* GameScene.swift in Sources */,
 				64BB378F1AA9E0DD00DF749F /* GameViewController.swift in Sources */,
 				64BB37891AA9E0DD00DF749F /* AppDelegate.swift in Sources */,
+				64BB37AD1AA9F36200DF749F /* Scrolling.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

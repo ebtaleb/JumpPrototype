@@ -9,47 +9,150 @@
 import SpriteKit
 
 class GameScene: SKScene {
+
+    var shapeNode: SKShapeNode!
+
+    var _lastUpdateTime: NSTimeInterval = 0.0
+    var _dt: NSTimeInterval = 0.0
+    var _velocity: CGPoint = CGPointMake(0, 0)
+
+    var duckTimer: NSTimer!
+
+    override init(size: CGSize) {
+        super.init(size: size)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func didMoveToView(view: SKView) {
 
-        backgroundColor = SKColor.whiteColor()
+        setUpBackground()
 
-        var circle : CGRect = CGRectMake(100.0, 100.0, 80.0, 80.0) //set your dimension
-        var shapeNode : SKShapeNode = SKShapeNode()
-        shapeNode.path = UIBezierPath(ovalInRect: circle).CGPath
-        shapeNode.fillColor = SKColor.redColor()
-        shapeNode.lineWidth = 1 //set your border
+        shapeNode = createRect(100.0, y: 100.0, w: 80.0, h: 140.0)
         self.addChild(shapeNode)
 
-        /* Setup your scene here */
-        let myLabel = SKLabelNode(fontNamed:"Chalkduster")
-        myLabel.text = "Hello, World!";
-        myLabel.fontSize = 65;
-        myLabel.position = CGPoint(x:CGRectGetMidX(self.frame), y:CGRectGetMidY(self.frame));
-        
-        self.addChild(myLabel)
+        setUpGravity()
+        setUpGestures()
     }
-    
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        /* Called when a touch begins */
-        
-        for touch: AnyObject in touches {
-            let location = touch.locationInNode(self)
-            
-            let sprite = SKSpriteNode(imageNamed:"Spaceship")
-            
-            sprite.xScale = 0.5
-            sprite.yScale = 0.5
-            sprite.position = location
-            
-            let action = SKAction.rotateByAngle(CGFloat(M_PI), duration:1)
-            
-            sprite.runAction(SKAction.repeatActionForever(action))
-            
-            self.addChild(sprite)
+
+    func setUpBackground() {
+        backgroundColor = SKColor.whiteColor()
+
+        // add background frames
+        for (var i = 0; i < 2; i++) {
+            var bg = SKSpriteNode(imageNamed: "background.png")
+            bg.position = CGPointMake((CGFloat(i)*CGFloat(bg.size.width))+CGFloat(bg.size.width)/CGFloat(2), bg.size.height/2)
+            bg.name = "background"
+            self.addChild(bg)
         }
     }
-   
-    override func update(currentTime: CFTimeInterval) {
-        /* Called before each frame is rendered */
+
+    func setUpGravity() {
+        self.physicsWorld.gravity = CGVectorMake(0, -2)
+        view!.scene!.physicsBody = SKPhysicsBody(edgeLoopFromRect: view!.frame)
     }
+
+    func setUpGestures() {
+
+        var swipeUp = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
+        swipeUp.direction = UISwipeGestureRecognizerDirection.Up
+        self.view!.addGestureRecognizer(swipeUp)
+
+        var swipeDown = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
+        swipeDown.direction = UISwipeGestureRecognizerDirection.Down
+        self.view!.addGestureRecognizer(swipeDown)
+    }
+
+    override func update(currentTime: CFTimeInterval) {
+
+        if _lastUpdateTime != 0 {
+            _dt = currentTime - _lastUpdateTime
+        } else {
+            _dt = 0
+        }
+        _lastUpdateTime = currentTime
+        moveBackground()
+    }
+
+    func moveBackground() {
+        self.enumerateChildNodesWithName("background", usingBlock: { (node,s) -> () in
+            var bg: SKNode = node
+            var bgVel = CGPointMake(-320.0, 0)
+            var amountToMove = self.CGPointMultiplyScalar(bgVel, p2: CGFloat(self._dt))
+            bg.position = self.CGPointAdd(bg.position, p2: amountToMove)
+
+            if bg.position.x <= -bg.frame.width/2 {
+                bg.position = CGPointMake(bg.position.x + (bg.frame.width)*2, bg.position.y)
+            }
+        })
+    }
+
+    func respondToSwipeGesture(gesture: UIGestureRecognizer) {
+
+        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
+
+            switch swipeGesture.direction {
+            case UISwipeGestureRecognizerDirection.Up:
+                println("Swiped up")
+                shapeNode.physicsBody!.applyImpulse(CGVectorMake(0.0, 300.0))
+            case UISwipeGestureRecognizerDirection.Down:
+                println("Swiped down")
+                shapeNode = createRect(100.0, y: 100.0, w: 140.0, h: 80.0)
+
+                removeNode("PC")
+                self.addChild(shapeNode)
+
+                duckTimer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: "restore", userInfo: nil, repeats: false)
+            default:
+                break
+            }
+        }
+    }
+
+    func CGPointAdd(p1: CGPoint, p2: CGPoint) -> CGPoint {
+        return CGPointMake(p1.x + p2.x, p1.y + p2.y)
+    }
+
+    func CGPointMultiplyScalar(p1: CGPoint, p2: CGFloat) -> CGPoint {
+        return CGPointMake(p1.x * p2, p1.y * p2)
+    }
+
+    func removeNode(identifier: String) {
+
+        self.enumerateChildNodesWithName(identifier, usingBlock: {
+            (node,s) -> () in
+            node.removeFromParent()
+        })
+    }
+
+    func createRect(x: CGFloat, y: CGFloat, w: CGFloat, h: CGFloat) -> SKShapeNode {
+        var newNode = SKShapeNode(rect: CGRectMake(x, y, w, h))
+        newNode.fillColor = SKColor.redColor()
+        newNode.name = "PC"
+
+        newNode.physicsBody = SKPhysicsBody(circleOfRadius: newNode.frame.size.width / 2)
+        newNode.physicsBody!.dynamic = true
+        newNode.physicsBody!.allowsRotation = false
+        newNode.physicsBody!.restitution = 0.0
+        newNode.physicsBody!.friction = 1.0
+        newNode.physicsBody!.mass = 1
+
+        // simulates air/fluid friction
+        newNode.physicsBody!.linearDamping = 0.0
+
+        newNode.zPosition = 1
+
+        return newNode
+    }
+
+    func restore() {
+
+        shapeNode = createRect(100.0, y: 100.0, w: 80.0, h: 140.0)
+
+        removeNode("PC")
+        self.addChild(shapeNode)
+    }
+
 }
