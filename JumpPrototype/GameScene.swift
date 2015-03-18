@@ -11,6 +11,9 @@ import SpriteKit
 class GameScene: SKScene {
 
     var shapeNode: SKShapeNode!
+    var canJump: Bool!
+    var savedY: CGFloat!
+    var isGrounded: Bool!
 
     var _lastUpdateTime: NSTimeInterval = 0.0
     var _dt: NSTimeInterval = 0.0
@@ -31,6 +34,9 @@ class GameScene: SKScene {
         setUpBackground()
 
         shapeNode = createRect(100.0, y: 100.0, w: 80.0, h: 140.0)
+        savedY = shapeNode.frame.maxY
+        isGrounded = true
+        canJump = true
         self.addChild(shapeNode)
 
         setUpGravity()
@@ -50,7 +56,7 @@ class GameScene: SKScene {
     }
 
     func setUpGravity() {
-        self.physicsWorld.gravity = CGVectorMake(0, -2)
+        self.physicsWorld.gravity = CGVectorMake(0, -9.8)
         view!.scene!.physicsBody = SKPhysicsBody(edgeLoopFromRect: view!.frame)
     }
 
@@ -74,6 +80,13 @@ class GameScene: SKScene {
         }
         _lastUpdateTime = currentTime
         moveBackground()
+
+        if shapeNode.frame.maxY == savedY {
+            isGrounded = true
+        } else {
+            isGrounded = false
+        }
+        savedY = shapeNode.frame.maxY
     }
 
     func moveBackground() {
@@ -96,15 +109,22 @@ class GameScene: SKScene {
             switch swipeGesture.direction {
             case UISwipeGestureRecognizerDirection.Up:
                 println("Swiped up")
-                shapeNode.physicsBody!.applyImpulse(CGVectorMake(0.0, 300.0))
+                if canJump == true && isGrounded == true {
+                    shapeNode.physicsBody!.applyImpulse(CGVectorMake(0.0, 600.0))
+                }
             case UISwipeGestureRecognizerDirection.Down:
-                println("Swiped down")
-                shapeNode = createRect(100.0, y: 100.0, w: 140.0, h: 80.0)
 
-                removeNode("PC")
-                self.addChild(shapeNode)
+                if isGrounded == true {
+                    println("Swiped down")
+                    shapeNode = createRect(100.0, y: 100.0, w: 140.0, h: 80.0)
 
-                duckTimer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: "restore", userInfo: nil, repeats: false)
+                    removeNode("PC")
+                    self.addChild(shapeNode)
+                    canJump = false
+                    isGrounded = true
+
+                    duckTimer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: "restore", userInfo: nil, repeats: false)
+                }
             default:
                 break
             }
@@ -151,6 +171,7 @@ class GameScene: SKScene {
 
         shapeNode = createRect(100.0, y: 100.0, w: 80.0, h: 140.0)
 
+        canJump = true
         removeNode("PC")
         self.addChild(shapeNode)
     }

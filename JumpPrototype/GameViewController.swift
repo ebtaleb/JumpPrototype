@@ -15,6 +15,15 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         let scene = GameScene(size: view.bounds.size)
         let skView = view as SKView
+
+        let button  = UIButton.buttonWithType(UIButtonType.System) as UIButton
+        button.frame = CGRectMake(CGRectGetMaxX(view.frame)-100, CGRectGetMinY(view.frame), 100, 50)
+        button.backgroundColor = UIColor.greenColor()
+        button.setTitle("Test Button", forState: UIControlState.Normal)
+        button.addTarget(self, action: "buttonAction", forControlEvents: UIControlEvents.TouchUpInside)
+
+        self.view.addSubview(button)
+
         skView.showsFPS = true
         skView.showsNodeCount = true
         skView.ignoresSiblingOrder = true
@@ -41,5 +50,9 @@ class GameViewController: UIViewController {
 
     override func prefersStatusBarHidden() -> Bool {
         return true
+    }
+
+    func buttonAction() {
+        println("tapped")
     }
 }

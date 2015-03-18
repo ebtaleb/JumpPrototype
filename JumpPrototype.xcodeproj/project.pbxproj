@@ -423,6 +423,7 @@
 				64BB37A81AA9E0DD00DF749F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		64BB37A91AA9E0DD00DF749F /* Build configuration list for PBXNativeTarget "JumpPrototypeTests" */ = {
 			isa = XCConfigurationList;
@@ -431,6 +432,7 @@
 				64BB37AB1AA9E0DD00DF749F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
